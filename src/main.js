@@ -62,6 +62,10 @@ function carregarArquivoPredefinido() {
 
 function salvarListaEmArquivo() {
   var inputLista = document.getElementById("input-lista");
+  if (inputLista.value.trim() === "") {
+    alert("A lista está vazia, não há nada para exportar.");
+    return;
+  }
   var lista = inputLista.value;
 
   var blob = new Blob([lista], { type: "text/plain" });
@@ -77,19 +81,43 @@ function salvarListaEmArquivo() {
 
 function exportarLista() {
   var inputLista = document.getElementById("input-lista");
-  if (inputLista.value.trim() === "") {
-    alert("A lista está vazia, não há nada para exportar.");
-    return;
+  var lista = inputLista.value.split(";");
+  var steamModUrl = "https://steamcommunity.com/sharedfiles/filedetails/?id=";
+
+  var listaTxt = "";
+  for (var i = 0; i < lista.length; i++) {
+    var modId = lista[i];
+    listaTxt += modId + "\n";
   }
 
-  var lista = inputLista.value;
-  var blob = new Blob([lista], { type: "text/plain;charset=utf-8" });
+  var blob = new Blob([listaTxt], { type: "text/plain;charset=utf-8" });
+  var fileName = "lista.txt";
+  var url = URL.createObjectURL(blob);
 
-  var link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "mod-list.txt";
-  link.textContent = "Clique aqui para baixar a lista de mods";
+  var downloadLink = document.createElement("a");
+  downloadLink.href = url;
+  downloadLink.download = fileName;
+  downloadLink.innerHTML = "Download da lista";
+  document.body.appendChild(downloadLink);
 
-  var divLista = document.getElementById("lista");
-  divLista.appendChild(link);
+  if (lista.length > 0) {
+    var copyLinkButton = document.createElement("button");
+    copyLinkButton.onclick = copiarLink;
+    copyLinkButton.innerHTML = "Copiar link";
+    document.body.appendChild(copyLinkButton);
+  }
+}
+
+function copiarLink() {
+  var downloadLink = document.querySelector("a[download]");
+  var url = downloadLink.href;
+
+  navigator.clipboard.writeText(url).then(
+    function () {
+      alert("Link copiado para a área de transferência!");
+    },
+    function (err) {
+      console.error("Erro ao copiar o link: ", err);
+    },
+  );
 }

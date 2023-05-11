@@ -12,9 +12,15 @@
       ><br />
       <textarea id="input-lista" rows="5" cols="50"></textarea><br />
       <button type="submit">Gerar lista</button>
-      <button onclick="carregarArquivoPredefinido()">
-        Carregar arquivo predefinido
-      </button>
+      <div>
+        <button onclick="carregarArquivoPredefinido()">
+          Carregar arquivo predefinido
+        </button>
+        <button onclick="salvarListaEmArquivo()">
+          Salvar lista em arquivo
+        </button>
+        <button type="button" onclick="exportarLista()">Exportar lista</button>
+      </div>
     </form>
     <div id="container-list">
       <div id="lista"></div>

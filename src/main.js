@@ -59,3 +59,37 @@ function carregarArquivoPredefinido() {
   };
   xhr.send();
 }
+
+function salvarListaEmArquivo() {
+  var inputLista = document.getElementById("input-lista");
+  var lista = inputLista.value;
+
+  var blob = new Blob([lista], { type: "text/plain" });
+  var url = window.URL.createObjectURL(blob);
+  var link = document.createElement("a");
+  link.href = url;
+  link.download = "lista_de_mods.txt";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  alert("Lista salva em arquivo com sucesso!");
+}
+
+function exportarLista() {
+  var inputLista = document.getElementById("input-lista");
+  if (inputLista.value.trim() === "") {
+    alert("A lista está vazia, não há nada para exportar.");
+    return;
+  }
+
+  var lista = inputLista.value;
+  var blob = new Blob([lista], { type: "text/plain;charset=utf-8" });
+
+  var link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "mod-list.txt";
+  link.textContent = "Clique aqui para baixar a lista de mods";
+
+  var divLista = document.getElementById("lista");
+  divLista.appendChild(link);
+}
